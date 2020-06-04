@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bus Map</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
+        integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+        crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
+        integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
+        crossorigin=""></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800;900&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        body {
+            height: 100vh;
+            overflow-y: hidden;
+        }
+
+        .nav {
+            width: 100%;
+            height: 60px;
+            background-color: rgba(37, 37, 37, 0.6);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+        }
+
+        h1 {
+            transition: .3s linear;
+        }
+
+        h1:hover {
+            cursor: pointer;
+            transform: scale(1.2);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="nav">
+        <h1>Kranj Bus Live Map</h1>
+    </div>
+    <div id="mapid" style="width: 100%; height: 100vh"></div>
+
+
+
+
+    <script>
+        var mymap = L.map('mapid').setView([46.239227, 14.355698], 15);
+        L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+            attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+            maxZoom: 18,
+            id: 'mapbox/streets-v11',
+            tileSize: 512,
+            zoomOffset: -1,
+            accessToken: 'pk.eyJ1IjoiYmJveWp1cmUiLCJhIjoiY2tiMG9rdm9nMDVydDJzbW44azJ5cXZuZCJ9.nMXsZQ9_n6bl4j0RMbN4Wg'
+        }).addTo(mymap);
+
+        mapMarker1 = []
+        mapMarker2 = []
+        mapMarker3 = []
+        mapMarker4 = []
+        mapMarker5 = []
+        mapMarker6 = []
+
+        var source = new EventSource("/topic/geodata");
+        source.addEventListener("message", e => {
+            console.log("Message")
+            obj = JSON.parse(e.data)
+            console.log(obj)
+
+            if(obj.busline == '00001'){
+                for(var i = 0; i < mapMarker1.length; i++){
+                    mymap.removeLayer(mapMarker1[i])
+                }
+                marker1 = L.marker([obj.latitude, obj.longitude]).addTo(mymap)
+                mapMarker1.push(marker1)
+            }
+
+
+            if(obj.busline == '00002'){
+                for(var i = 0; i < mapMarker2.length; i++){
+                    mymap.removeLayer(mapMarker2[i])
+                }
+                marker2 = L.marker([obj.latitude, obj.longitude]).addTo(mymap)
+                mapMarker2.push(marker2)
+            }
+
+            if(obj.busline == '00003'){
+                for(var i = 0; i < mapMarker3.length; i++){
+                    mymap.removeLayer(mapMarker3[i])
+                }
+                marker3 = L.marker([obj.latitude, obj.longitude]).addTo(mymap)
+                mapMarker3.push(marker3)
+            }
+
+            if(obj.busline == '00004'){
+                for(var i = 0; i < mapMarker4.length; i++){
+                    mymap.removeLayer(mapMarker4[i])
+                }
+                marker4 = L.marker([obj.latitude, obj.longitude]).addTo(mymap)
+                mapMarker4.push(marker4)
+            }
+
+            if(obj.busline == '00005'){
+                for(var i = 0; i < mapMarker5.length; i++){
+                    mymap.removeLayer(mapMarker5[i])
+                }
+                marker5 = L.marker([obj.latitude, obj.longitude]).addTo(mymap)
+                mapMarker5.push(marker5)
+            }
+
+            if(obj.busline == '00006'){
+                for(var i = 0; i < mapMarker6.length; i++){
+                    mymap.removeLayer(mapMarker6[i])
+                }
+                marker6 = L.marker([obj.latitude, obj.longitude]).addTo(mymap)
+                mapMarker6.push(marker6)
+            }
+
+        }, false)
+    </script>
+</body>
+
+</html>
